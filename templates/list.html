@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+LIST 
+
+
+{% for article in object_list %}
+    <li>{{ article.book }}</li>
+{% empty %}
+    <li>No books yet.</li>
+{% endfor %}
+
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+ {% block extra_css %}
+    <link rel="stylesheet" type="text/css" href="assets/login.css">
+{% endblock %}
+
+
+{% block content %}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6 col-md-4 col-md-offset-4">
+            <h1 class="text-center login-title">Please login</h1>
+            <div class="account-wall">
+                <center>
+                <img class="profile-img img-circle" src="http://jamieglazov.com/wp-content/uploads/2014/08/ob6.jpg"
+                    alt="" width="150px">
+                </center>    
+                <form class="form-signin" method="post" action="{% url 'django.contrib.auth.views.login' %}">
+                    {% csrf_token %}
+                    <input id="id_username" name="username" type="text" class="form-control" placeholder="Email" required autofocus>
+                    <input id="id_password" name="password" type="password" class="form-control" placeholder="Password" required>
+                    <button class="btn btn-lg btn-primary btn-block" value="login" type="submit">
+                        Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

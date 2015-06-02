@@ -1,0 +1,76 @@
+{% extends "base.html" %} 
+
+
+{% block extra_css %}
+<link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/fullcalendar.min.css" rel="stylesheet">
+{% endblock %}
+
+
+{% block content %}
+
+<h1>School:  Mountain View Elementary School</h1>
+
+
+
+<div class="enter_bookname">
+        <div class="alert alert-info" role="alert">To continue, please, enter the name of book:</div>
+        Book:<input type="text" id="id_bookname" name="bookname" required><br>
+        <input data-csrf-token="{{ csrf_token }}" id="id-csrf-token" class="btn btn-primary" type="hidden" value="{{ csrf_token }}">
+        <input id="nextBtn" class="btn btn-primary" type="submit" value="Submit">
+</div>
+
+<div id="calendar" class="hide"></div>
+
+
+
+
+{% endblock %} 
+
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment-with-locales.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/2.3.1/fullcalendar.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$("#calendar").hide();
+
+        $("#nextBtn").click(function () {
+            if ($("#id_bookname").val() == ""){
+                alert("Please enter a bookname");
+            }else {
+                    var book =  $("#id_bookname").val();
+                    $(".enter_bookname").addClass("hide");
+                    $("#calendar").removeClass("hide");
+                    $("#calendar").fullCalendar('today');
+                    console.log(book);
+                }
+        });
+        
+        
+        $('#calendar').fullCalendar({
+            selectable: true,
+            selectHelper: true,
+            select: function(start, end, jsEvent, view){
+                console.log("desde "+ start.format() + " hasta "+ end.format());
+                console.log( $("#id_bookname").val() );
+                
+                        $.post("/record/add", {
+                            bookname: $("#id_bookname").val(),
+                            read_from: start.format(),
+                            read_until: end.format(),
+                            csrfmiddlewaretoken: $("#id-csrf-token").val(),
+                        })
+                        .done(function (data) {
+                            alert("Done! Go to admin");
+                            location.reload();
+                        })
+                        .fail(function () {
+                            alert("Fail !");
+                        });
+
+            }
+        });
+
+    });
+</script>
+{% endblock %}

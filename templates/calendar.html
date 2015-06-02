@@ -1,0 +1,53 @@
+
+{% block content %}
+Please select the day or days:
+
+<div id='calendar'></div>
+{% endblock %}
+
+
+<div id="dialog-confirm" title="Empty the recycle bin?">
+  <p><span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>These items will be permanently deleted and cannot be recovered. Are you sure?</p>
+</div>
+
+
+
+{% block extra_js %}
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+    // page is now ready, initialize the calendar...
+
+    $('#calendar').fullCalendar({
+        selectable: true,
+        selectHelper: true,
+        dayClick: function(date) {
+            alert('a day has been clicked!' + date.format());
+    },
+        select: function(start, end, jsEvent, view){
+            alert("desde "+ start.format() + " hasta "+ end.format());
+            
+            $( "#dialog-confirm" ).dialog({
+                resizable: false,
+                height:140,
+                modal: true,
+                buttons: {
+                    "Delete all items": function() {
+                        $( this ).dialog( "close" );
+                    },
+                    Cancel: function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+            
+            
+        
+    }
+    });
+
+});
+
+</script>
+{% endblock %}
